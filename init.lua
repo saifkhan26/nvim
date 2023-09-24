@@ -12,9 +12,12 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 vim.g.mapleader = " " -- Make sure to set `mapleader` before lazy so your mappings are correct
-vim.g.netrw_browse_split = 0
+vim.g.netrw_browse_split = 2
 vim.g.netrw_banner = 0
 vim.g.netrw_winsize = 25
+vim.g.netrw_altv = 1
+vim.g.netrw_liststyle = 3
+vim.g.netrw_winsize = 85
 vim.g.maplocalleader = " "
 -- Set highlight on search
 vim.o.hlsearch = false
@@ -153,8 +156,8 @@ require("lazy").setup({
                 },
             },
         } },
-    {"nvim-treesitter/nvim-treesitter", build = ":TSUpdate", 
-        config = function () 
+    {"nvim-treesitter/nvim-treesitter", build = ":TSUpdate",
+        config = function ()
             local configs = require("nvim-treesitter.configs")
             configs.setup({
                 ensure_installed = { "c", "lua", "vim", "vimdoc","javascript", "html" },
@@ -243,8 +246,8 @@ vim.keymap.set({"n", "v"}, "<leader>d", [["_d]])
 vim.keymap.set("n", "<leader>f", vim.lsp.buf.format)
 -- Telescope
 local builtin = require('telescope.builtin')
-vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
-vim.keymap.set('n', '<leader>fg', builtin.live_grep, {})
-vim.keymap.set('n', '<leader>fb', builtin.buffers, {})
-vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
+vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = "[F]ind [F]iles" })
+vim.keymap.set('n', '<leader>fg', builtin.live_grep, { desc = "[F]ind [G]rep" })
+vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = "[F]ind [B]uffer" })
+vim.keymap.set('n', '<leader>ft', builtin.help_tags, { desc = "[F]ind [T]ags" })
 
