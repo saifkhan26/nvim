@@ -201,7 +201,21 @@ require("lazy").setup({
             end,
         },
     },
-    {'akinsho/toggleterm.nvim', version = "*", config = true}
+    {'akinsho/toggleterm.nvim', version = "*", config = true},
+  {"ThePrimeagen/harpoon"},
+  {
+    'windwp/nvim-autopairs',
+    event = "InsertEnter",
+    opts = {} -- this is equalent to setup({}) function
+},
+  {
+    "kylechui/nvim-surround",
+    version = "*", -- Use for stability; omit to use `main` branch for the latest features
+    event = "VeryLazy",
+    config = function()
+        require("nvim-surround").setup({})
+    end
+}
 })
 
 -- setup must be called before loading
@@ -251,3 +265,16 @@ vim.keymap.set('n', '<leader>fg', builtin.live_grep, { desc = "[F]ind [G]rep" })
 vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = "[F]ind [B]uffer" })
 vim.keymap.set('n', '<leader>ft', builtin.help_tags, { desc = "[F]ind [T]ags" })
 
+-- Harpoon Configure
+local mark = require("harpoon.mark")
+local ui = require("harpoon.ui")
+
+vim.keymap.set("n", "<A-a>", mark.add_file)
+vim.keymap.set("n", "<A-;>", ui.toggle_quick_menu)
+
+vim.keymap.set("n", "<A-u>", function() ui.nav_file(1) end)
+vim.keymap.set("n", "<A-i>", function() ui.nav_file(2) end)
+vim.keymap.set("n", "<A-o>", function() ui.nav_file(3) end)
+vim.keymap.set("n", "<A-p>", function() ui.nav_file(4) end)
+vim.keymap.set("n", "<A-.>", function() ui.nav_next() end)
+vim.keymap.set("n", "<A-,>", function() ui.nav_prev() end)
