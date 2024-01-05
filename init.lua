@@ -215,11 +215,16 @@ require("lazy").setup({
     config = function()
         require("nvim-surround").setup({})
     end
-}
+},
+{ 'echasnovski/mini.files', version = '*' },
+    {
+    "uga-rosa/ccc.nvim",
+  },
 })
 
 -- setup must be called before loading
 vim.cmd.colorscheme "catppuccin"
+vim.opt.termguicolors = true
 
 local lsp = require('lsp-zero').preset({})
 
@@ -239,11 +244,30 @@ require("toggleterm").setup{
     open_mapping = [[<c-\>]],
     direction = "float"
 }
+-- CCC Config
+local ccc = require("ccc")
+local mapping = ccc.mapping
+ccc.setup({
+  -- Your preferred settings
+  -- Example: enable highlighter
+  highlighter = {
+    auto_enable = true,
+    lsp = true,
+  },
+})
 
--- -- PLUGIN SPECIFIC BINDS
--- Netrw
-vim.keymap.set("n", "<leader>e", vim.cmd.Ex)
--- -- Custom Keymaps from theprimeagen
+-- Mini Files
+require("mini.files").setup()
+
+-- PLUGIN SPECIFIC BINDS
+
+
+vim.keymap.set("n", "<Leader>e", function()
+  MiniFiles.open()
+end)
+
+vim.keymap.set("n", "<F5>", "<cmd>put =strftime('%c')<CR>P<cr>", { silent = true })
+-- Custom Keymaps from theprimeagen
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 vim.keymap.set("n", "J", "mzJ`z")
