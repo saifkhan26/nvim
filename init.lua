@@ -53,34 +53,6 @@ vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
 vim.opt.smartindent = true
 
--- Lua Line Bubble theme
-local colors = {
-  blue   = '#80a0ff',
-  cyan   = '#79dac8',
-  black  = '#000000',
-  white  = '#c6c6c6',
-  red    = '#ff5189',
-  violet = '#d183e8',
-  grey   = '#303030',
-}
-
-local bubbles_theme = {
-  normal = {
-    a = { fg = colors.black, bg = colors.violet },
-    b = { fg = colors.white, bg = colors.grey },
-    c = { fg = colors.black, bg = colors.black },
-  },
-
-  insert = { a = { fg = colors.black, bg = colors.blue } },
-  visual = { a = { fg = colors.black, bg = colors.cyan } },
-  replace = { a = { fg = colors.black, bg = colors.red } },
-
-  inactive = {
-    a = { fg = colors.white, bg = colors.black },
-    b = { fg = colors.white, bg = colors.black },
-    c = { fg = colors.black, bg = colors.black },
-  },
-}
 
 require("lazy").setup({
     -- Git related plugins
@@ -146,16 +118,23 @@ require("lazy").setup({
             {'L3MON4D3/LuaSnip'},     -- Required
         }
     },
-    { "catppuccin/nvim", name = "catppuccin", priority = 1000,
-        opts = {
-            color_overrides = {
-                mocha = {
-                    base = "#000000",
-                    mantle = "#000000",
-                    crust = "#000000",
-                },
-            },
-        } },
+{
+  'olivercederborg/poimandres.nvim',
+  lazy = false,
+  priority = 1000,
+  config = function()
+    require('poimandres').setup {
+      -- leave this setup function empty for default config
+      -- or refer to the configuration section
+      -- for configuration options
+    }
+  end,
+
+  -- optionally set the colorscheme within lazy config
+  init = function()
+    vim.cmd("colorscheme poimandres")
+  end
+},
     {"nvim-treesitter/nvim-treesitter", build = ":TSUpdate",
         config = function ()
             local configs = require("nvim-treesitter.configs")
@@ -216,14 +195,19 @@ require("lazy").setup({
         require("nvim-surround").setup({})
     end
 },
-{ 'echasnovski/mini.files', version = '*' },
     {
     "uga-rosa/ccc.nvim",
   },
+{
+  'stevearc/oil.nvim',
+  opts = {},
+  -- Optional dependencies
+  dependencies = { "nvim-tree/nvim-web-devicons" },
+}
 })
 
 -- setup must be called before loading
-vim.cmd.colorscheme "catppuccin"
+-- vim.cmd.colorscheme "catppuccin"
 vim.opt.termguicolors = true
 
 local lsp = require('lsp-zero').preset({})
@@ -256,15 +240,10 @@ ccc.setup({
   },
 })
 
--- Mini Files
-require("mini.files").setup()
-
+--Oil.nvim
+require("oil").setup()
 -- PLUGIN SPECIFIC BINDS
-
-
-vim.keymap.set("n", "<Leader>e", function()
-  MiniFiles.open()
-end)
+vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
 
 vim.keymap.set("n", "<F5>", "<cmd>put =strftime('%c')<CR>P<cr>", { silent = true })
 -- Custom Keymaps from theprimeagen
