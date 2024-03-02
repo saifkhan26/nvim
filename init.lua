@@ -95,11 +95,7 @@ require("lazy").setup({
         },
     },
     {
-        -- Add indentation guides even on blank lines
-        'lukas-reineke/indent-blankline.nvim',
-        -- Enable `lukas-reineke/indent-blankline.nvim`
-        -- See `:help indent_blankline.txt`
-        opts = { },
+        "lukas-reineke/indent-blankline.nvim", main = "ibl", opts = {}
     },
     {"folke/which-key.nvim", opts = {} },
     { "folke/neoconf.nvim", cmd = "Neoconf" },
@@ -215,8 +211,32 @@ local lsp = require('lsp-zero').preset({})
 lsp.on_attach(function(client, bufnr)
     -- see :help lsp-zero-keybindings
     -- to learn the available actions
-    lsp.default_keymaps({buffer = bufnr})
+    lsp.default_keymaps({
+        buffer = bufnr,
+        preserve_mappings = false
+    })
 end)
+
+-- to learn how to use mason.nvim with lsp-zero
+-- read this: https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/integrate-with-mason-nvim.md
+-- From section: Automatic setup of language servers
+require('mason').setup({})
+require('mason-lspconfig').setup({
+  ensure_installed = {},
+  handlers = {
+    lsp.default_setup,
+  },
+})
+
+
+require("mason-lspconfig").setup_handlers {
+    -- The first entry (without a key) will be the default handler
+    -- and will be called for each installed server that doesn't have
+    -- a dedicated handler.
+    function (server_name) -- default handler (optional)
+        require("lspconfig")[server_name].setup {}
+    end,
+}
 
 -- (Optional) Configure lua language server for neovim
 require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
